@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CornerFlagView">
+        <!--文本大小-->
+        <attr name="cfv_textSize" format="dimension"/>
+        <!--文本内容-->
+        <attr name="cfv_textContent" format="string"/>
+        <!--文本颜色-->
+        <attr name="cfv_textColor" format="color"/>
+        <!--背景颜色-->
+        <attr name="cfv_backgroundColor" format="color"/>
+        <!--是否占满上角-->
+        <attr name="cfv_fullCorner" format="boolean"/>
+        <!--倾斜放向-->
+        <attr name="cfv_orientation" format="enum">
+            <!--右角标，向左侧倾斜-->
+            <enum name="right" value="0"/>
+            <!--左角标，向右侧倾斜-->
+            <enum name="left" value="1"/>
+        </attr>
+
+    </declare-styleable>
+</resources>
