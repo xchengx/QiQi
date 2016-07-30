@@ -11,6 +11,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="com.uqi.qiqi.MainActivity"
+    android:background="#dabc"
     android:id="@+id/content">
 
         <com.uqi.qiqi.widget.CornerFlagView
