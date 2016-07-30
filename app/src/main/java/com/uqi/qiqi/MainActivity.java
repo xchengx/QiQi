@@ -23,12 +23,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ViewGroup lViewGroup = (ViewGroup)findViewById(R.id.content);
-        CornerFlagView cfv = new CornerFlagView(this);
-        cfv.setLayoutParams(new LinearLayout.LayoutParams(100, ViewGroup.LayoutParams.WRAP_CONTENT));
-        cfv.setTextContent("中华人民共和国万岁");
-        cfv.setTextSize(20);
-        lViewGroup.addView(cfv);
 //        View decorView = getWindow().getDecorView();
 //        FrameLayout contentParent = (FrameLayout) decorView.findViewById(android.R.id.content);
 //

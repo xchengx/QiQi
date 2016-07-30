@@ -12,21 +12,14 @@
     android:orientation="vertical"
     tools:context="com.uqi.qiqi.MainActivity"
     android:id="@+id/content">
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="世界人民大团结万岁"
-        android:textSize="20sp"
 
-        />
-    <!--
         <com.uqi.qiqi.widget.CornerFlagView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cfv_backgroundColor="#cf0"
             app:cfv_orientation="right"
-            app:cfv_textContent="中国人民万岁"
-            app:cfv_textColor="#fff"
+            app:cfv_textContent="Hello Android"
+            app:cfv_textColor="#d12"
             app:cfv_fullCorner="false"
             app:cfv_textSize="16sp"
             />
@@ -61,5 +54,5 @@
             app:cfv_fullCorner="true"
             app:cfv_textSize="18sp"
             />
-        -->
+
 </LinearLayout>
