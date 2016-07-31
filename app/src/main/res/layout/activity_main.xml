@@ -11,21 +11,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="com.uqi.qiqi.MainActivity"
-    android:background="#dabc"
     android:id="@+id/content">
 
         <com.uqi.qiqi.widget.CornerFlagView
+            android:id="@+id/showdialog"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:cfv_backgroundColor="#cf0"
             app:cfv_orientation="right"
-            app:cfv_textContent="Hello Android"
+            app:cfv_textContent="显示对话框"
             app:cfv_textColor="#d12"
             app:cfv_fullCorner="false"
             app:cfv_textSize="16sp"
             />
 
         <com.uqi.qiqi.widget.CornerFlagView
+            android:id="@+id/showActionSheet"
             android:layout_width="100dp"
             android:layout_height="100dp"
             app:cfv_backgroundColor="#abc"

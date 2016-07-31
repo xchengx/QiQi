@@ -5,6 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/ui_alert_backgroud"
     android:orientation="vertical"
+
     >
 
     <TextView
@@ -35,12 +36,27 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         >
 
         <TextView
+            android:id="@+id/ok"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="确定"
+            android:textSize="18sp"
+            />
+        <View
+            android:id="@+id/spline"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#ddd"
+            />
+        <TextView
             android:id="@+id/cancel"
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_weight="1"
             android:gravity="center"
@@ -48,20 +64,6 @@
             android:textSize="18sp"
             android:textStyle="bold"
             />
-        <View
-            android:id="@+id/spline"
-            android:layout_width="1dp"
-            android:layout_height="48dp"
-            android:background="#ddd"
-            />
-        <TextView
-            android:id="@+id/ok"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="确定"
-            android:textSize="18sp"
-            />
+
     </LinearLayout>
 </LinearLayout>
