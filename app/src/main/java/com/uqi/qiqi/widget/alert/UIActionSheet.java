@@ -18,6 +18,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ListView;
@@ -48,7 +51,7 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
     private AlertItem cancelAlertItem;
     private List<AlertItem> actionItems;
     private AlertItem msgAlertItem;
-
+    private View layoutParent;
     public UIActionSheet(Context pContext) {
         if (!(pContext instanceof Activity)) {
             throw new RuntimeException("The context must is a Activity");
@@ -111,14 +114,14 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         alertRoot.setLayoutParams(lParams);
     }
     private void initSheet() {
-        View view = xInflater.inflate(R.layout.layout_ui_action_sheet, null, false);
-        view.setOnClickListener(new View.OnClickListener() {
+        layoutParent = xInflater.inflate(R.layout.layout_ui_action_sheet, null, false);
+        layoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View pView) {
                 //占住焦点
             }
         });
-        TextView titleTv = (TextView) view.findViewById(R.id.title);
+        TextView titleTv = (TextView) layoutParent.findViewById(R.id.title);
         if (titleAlertItem != null) {
             titleTv.setText(titleAlertItem.getContent());
             titleTv.setTextColor(titleAlertItem.getColor());
@@ -128,7 +131,7 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
             titleTv.setVisibility(View.GONE);
         }
 
-        TextView msgTv = (TextView) view.findViewById(R.id.message);
+        TextView msgTv = (TextView) layoutParent.findViewById(R.id.message);
         if (msgAlertItem != null) {
             msgTv.setText(msgAlertItem.getContent());
             msgTv.setTextColor(msgAlertItem.getColor());
@@ -137,7 +140,7 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         } else {
             msgTv.setVisibility(View.GONE);
         }
-        TextView cancelTv = (TextView) view.findViewById(R.id.cancel);
+        TextView cancelTv = (TextView) layoutParent.findViewById(R.id.cancel);
         if(cancelAlertItem == null)
             cancelAlertItem = new AlertItem("取消", Color.rgb(0, 99, 219), true);
         cancelTv.setText(cancelAlertItem.getContent());
@@ -154,7 +157,7 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
             }
 
         });
-        ListView lv = (ListView)view.findViewById(R.id.actions);
+        ListView lv = (ListView)layoutParent.findViewById(R.id.actions);
         lv.setAdapter(new ActionAdapter(mContext,actionItems));
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -164,7 +167,9 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
                     xItemClickListener.onItemClick(pView, pI);
             }
         });
-        alertRoot.addView(view);
+        Animation anim = AnimationUtils.loadAnimation(mContext,R.anim.push_bottom_in);
+        layoutParent.startAnimation(anim);
+        alertRoot.addView(layoutParent);
     }
 
     public UIActionSheet show() {
@@ -176,13 +181,32 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
     }
 
     private void dismiss() {
-        if (viewRoot.findViewById(R.id.alert_root) != null) {
-            viewRoot.removeView(parent);
-            if (xItemClickListener != null) {
-                xDismissListener.onAlertDismiss();
-            }
+        if (viewRoot!=null && viewRoot.findViewById(R.id.alert_root) != null) {
+            Animation anim = AnimationUtils.loadAnimation(mContext,R.anim.push_bottom_out);
+            if(layoutParent!=null)layoutParent.startAnimation(anim);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation pAnimation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation pAnimation) {
+                   if(parent!=null) ((ViewGroup)parent).removeView(layoutParent);
+                    if(viewRoot!=null)viewRoot.removeView(parent);
+                    if (xItemClickListener != null) {
+                        xDismissListener.onAlertDismiss();
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation pAnimation) {
+
+                }
+            });
+
             //将焦点回交给activity
-            xWindow.setCallback(mContext);
+            if(xWindow!=null)xWindow.setCallback(mContext);
         }
     }
 
