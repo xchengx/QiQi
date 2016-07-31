@@ -47,7 +47,7 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
     private View.OnKeyListener mOnKeyListener;
     private boolean mCancelable = true;
     private boolean mCancelableOnTouchSide = false;
-    private AlertItem titleAlertItem;
+    private TitleAlertItem titleAlertItem;
     private AlertItem cancelAlertItem;
     private List<AlertItem> actionItems;
     private AlertItem msgAlertItem;
@@ -64,7 +64,7 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         viewRoot = (FrameLayout) xWindow.getDecorView().findViewById(android.R.id.content);
         initRootView();
     }
-    public UIActionSheet setTitle( AlertItem pTitle){
+    public UIActionSheet setTitle( TitleAlertItem pTitle){
         this.titleAlertItem = pTitle;
         return this;
     }
@@ -100,14 +100,6 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         parent = xInflater.inflate(R.layout.layout_ui_alert_root, viewRoot, false);
         alertRoot = (FrameLayout) parent.findViewById(R.id.alert_content);
         View v = parent.findViewById(R.id.alert_root);
-        v.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View pView) {
-//                if (mCancelable) {//点击对话框外消失
-                    dismiss();
-//                }
-            }
-        });
         FrameLayout.LayoutParams lParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lParams.gravity = Gravity.BOTTOM;
         lParams.setMargins(20, 0, 20, 20);
@@ -125,6 +117,7 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         if (titleAlertItem != null) {
             titleTv.setText(titleAlertItem.getContent());
             titleTv.setTextColor(titleAlertItem.getColor());
+            TitleAlertItem.drawDrawable(mContext,titleTv,titleAlertItem);
             if (titleAlertItem.isBold())
                 titleTv.setTypeface(Typeface.DEFAULT_BOLD);
         } else {

@@ -12,6 +12,7 @@ import com.uqi.qiqi.widget.alert.AlertItem;
 import com.uqi.qiqi.widget.alert.OnDismissListener;
 import com.uqi.qiqi.widget.alert.OnItemClickListener;
 import com.uqi.qiqi.widget.alert.OnShowListener;
+import com.uqi.qiqi.widget.alert.TitleAlertItem;
 import com.uqi.qiqi.widget.alert.UIActionSheet;
 import com.uqi.qiqi.widget.alert.UIAlertView;
 
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View pView) {
                 new UIAlertView(MainActivity.this)
-                        .setTitle(new AlertItem("Title"))
+                        .setTitle(new TitleAlertItem("Ttile",R.mipmap.ic_launcher,TitleAlertItem.Align.left))
                         .setMessage(new AlertItem("msg"))
                         .setOk(new AlertItem("OK"))
                         .setCancelable(true)
@@ -39,6 +40,26 @@ public class MainActivity extends AppCompatActivity {
                                 Log.e("----------->","----->show");
                             }
                         })
+                        .build()
+                        .show();;
+            }
+        });
+        findViewById(R.id.showvalert).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View pView) {
+                new UIAlertView(MainActivity.this)
+                        .setTitle(new TitleAlertItem("Ttile",R.mipmap.ic_launcher, TitleAlertItem.Align.left))
+                        .setMessage(new AlertItem("msg"))
+                        .setOk(new AlertItem("OK"))
+                        .setCancelable(true)
+                        .setCanceledOnTouchOutside(true)
+                        .setOnShowListener(new OnShowListener() {
+                            @Override
+                            public void onShow() {
+                                Log.e("----------->","----->show");
+                            }
+                        })
+                        .setOrientation(UIAlertView.ButtonOrientation.VERTICAL)
                         .build()
                         .show();;
             }
@@ -54,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
                 actions.add(new AlertItem("Action5"));
 
                 new UIActionSheet(MainActivity.this)
-                        .setTitle(new AlertItem("Title"))
+                        .setTitle(new TitleAlertItem("",R.mipmap.ic_launcher,TitleAlertItem.Align.left))
                         .setActions(actions)
                         .setCancelable(true)
                         .setOnShowListener(new OnShowListener() {

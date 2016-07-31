@@ -40,7 +40,7 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
     private OnDismissListener xDismissListener;
     private OnShowListener xOnShowListener;
     private boolean mCancelable = true;
-    private AlertItem titleAlertItem;
+    private TitleAlertItem titleAlertItem;
     private AlertItem cancelAlertItem;
     private AlertItem okAlertItem;
     private AlertItem msgAlertItem;
@@ -78,7 +78,7 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
         lParams.setMargins(60, 0, 60, 0);
         alertRoot.setLayoutParams(lParams);
     }
-    public UIAlertView setTitle( AlertItem pTitle){
+    public UIAlertView setTitle( TitleAlertItem pTitle){
         this.titleAlertItem = pTitle;
         return this;
     }
@@ -92,6 +92,10 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
     }
     public UIAlertView setOk( AlertItem pOk) {
         this.okAlertItem = pOk;
+        return this;
+    }
+    public UIAlertView setOrientation(ButtonOrientation orientation){
+        this.orientation = orientation;
         return this;
     }
     public UIAlertView setOnDismissListener(OnDismissListener pListener){
@@ -126,6 +130,7 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
         if (titleAlertItem != null) {
             titleTv.setText(titleAlertItem.getContent());
             titleTv.setTextColor(titleAlertItem.getColor());
+            TitleAlertItem.drawDrawable(mContext,titleTv,titleAlertItem);
             if (titleAlertItem.isBold())
                 titleTv.setTypeface(Typeface.DEFAULT_BOLD);
         } else {
