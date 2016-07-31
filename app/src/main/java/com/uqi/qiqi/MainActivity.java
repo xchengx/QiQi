@@ -13,6 +13,7 @@ import com.uqi.qiqi.widget.alert.OnDismissListener;
 import com.uqi.qiqi.widget.alert.OnItemClickListener;
 import com.uqi.qiqi.widget.alert.OnShowListener;
 import com.uqi.qiqi.widget.alert.TitleAlertItem;
+import com.uqi.qiqi.widget.alert.UIActionList;
 import com.uqi.qiqi.widget.alert.UIActionSheet;
 import com.uqi.qiqi.widget.alert.UIAlertView;
 
@@ -20,11 +21,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-
+    List<AlertItem> actions = new ArrayList<AlertItem>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        actions.add(new AlertItem("Action1",Color.RED));
+        actions.add(new AlertItem("Action2",Color.BLUE));
+        actions.add(new AlertItem("Action3",Color.BLACK));
+        actions.add(new AlertItem("Action4",Color.GRAY));
+        actions.add(new AlertItem("Action5"));
+        actions.add(new AlertItem("Action6"));
+        actions.add(new AlertItem("Action7"));
+        actions.add(new AlertItem("Action8"));
+
         findViewById(R.id.showdialog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View pView) {
@@ -40,6 +51,12 @@ public class MainActivity extends AppCompatActivity {
                                 Log.e("----------->","----->show");
                             }
                         })
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View pView, int position) {
+
+                            }
+                        })
                         .build()
                         .show();;
             }
@@ -47,10 +64,10 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.showvalert).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View pView) {
-                new UIAlertView(MainActivity.this)
+                new UIActionList(MainActivity.this)
                         .setTitle(new TitleAlertItem("Ttile",R.mipmap.ic_launcher, TitleAlertItem.Align.left))
                         .setMessage(new AlertItem("msg"))
-                        .setOk(new AlertItem("OK"))
+                        .setActions(actions)
                         .setCancelable(true)
                         .setCanceledOnTouchOutside(true)
                         .setOnShowListener(new OnShowListener() {
@@ -59,7 +76,6 @@ public class MainActivity extends AppCompatActivity {
                                 Log.e("----------->","----->show");
                             }
                         })
-                        .setOrientation(UIAlertView.ButtonOrientation.VERTICAL)
                         .build()
                         .show();;
             }
@@ -67,12 +83,6 @@ public class MainActivity extends AppCompatActivity {
         findViewById(R.id.showActionSheet).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View pView) {
-                List<AlertItem> actions = new ArrayList<AlertItem>();
-                actions.add(new AlertItem("Action1",Color.RED));
-                actions.add(new AlertItem("Action2",Color.BLUE));
-                actions.add(new AlertItem("Action3",Color.BLACK));
-                actions.add(new AlertItem("Action4",Color.GRAY));
-                actions.add(new AlertItem("Action5"));
 
                 new UIActionSheet(MainActivity.this)
                         .setTitle(new TitleAlertItem("",R.mipmap.ic_launcher,TitleAlertItem.Align.left))
@@ -82,6 +92,12 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onShow() {
                                 Log.e("----------->","----->show");
+                            }
+                        })
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View pView, int position) {
+                                Log.e("----------->","position----->"+position);
                             }
                         })
                         .build()

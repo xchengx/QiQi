@@ -6,7 +6,6 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -21,9 +20,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.animation.Animation;
-import android.view.animation.AnimationSet;
 import android.view.animation.AnimationUtils;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
@@ -35,28 +32,26 @@ import com.uqi.qiqi.R;
 import java.util.List;
 
 /**
- * Created by Shuxin on 2016/7/31.
+ * Created by Shuxin on 2016/7/30.
  */
-public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
+public class UIActionList implements KeyEvent.Callback, Window.Callback {
 
     private Activity mContext;
     private FrameLayout viewRoot;
     private View parent;
+    private View layoutParent;
     private Window xWindow;
     private LayoutInflater xInflater;
     private FrameLayout alertRoot;
     private OnItemClickListener xItemClickListener;
     private OnDismissListener xDismissListener;
     private OnShowListener xOnShowListener;
-    private View.OnKeyListener mOnKeyListener;
     private boolean mCancelable = true;
-    private boolean mCancelableOnTouchSide = false;
     private TitleAlertItem titleAlertItem;
     private AlertItem cancelAlertItem;
-    private List<AlertItem> actionItems;
     private AlertItem msgAlertItem;
-    private View layoutParent;
-    public UIActionSheet(Context pContext) {
+    private List<AlertItem> actionItems;
+    public UIActionList(Context pContext) {
         if (!(pContext instanceof Activity)) {
             throw new RuntimeException("The context must is a Activity");
         }
@@ -68,59 +63,68 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         viewRoot = (FrameLayout) xWindow.getDecorView().findViewById(android.R.id.content);
         initRootView();
     }
-    public UIActionSheet setTitle( TitleAlertItem pTitle){
-        this.titleAlertItem = pTitle;
-        return this;
-    }
-    public UIActionSheet setMessage( AlertItem pMessage){
-        this.msgAlertItem = pMessage;
-        return this;
-    }
-    public UIActionSheet setCancel( AlertItem pCancel){
-        this.cancelAlertItem = pCancel;
-        return this;
-    }
-    public UIActionSheet setActions( List<AlertItem> pActions) {
-        this.actionItems = pActions;
-        return this;
-    }
-    public UIActionSheet setOnDismissListener(OnDismissListener pListener){
-        this.xDismissListener = pListener;
-        return this;
-    }
-    public UIActionSheet setOnItemClickListener(OnItemClickListener pOnItemClickListener){
-        this.xItemClickListener = pOnItemClickListener;
-        return this;
-    }
-    public UIActionSheet setOnShowListener(OnShowListener pOnShowListener){
-        this.xOnShowListener = pOnShowListener;
-        return this;
-    }
-    public UIActionSheet build(){
-        initSheet();
-        return this;
-    }
+
     private void initRootView() {
         parent = xInflater.inflate(R.layout.layout_ui_alert_root, viewRoot, false);
         alertRoot = (FrameLayout) parent.findViewById(R.id.alert_content);
         View v = parent.findViewById(R.id.alert_root);
-        FrameLayout.LayoutParams lParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lParams.gravity = Gravity.BOTTOM;
-        lParams.setMargins(
-                mContext.getResources().getDimensionPixelSize(R.dimen.uiactionsheet_left_margin),
-                0,
-                mContext.getResources().getDimensionPixelSize(R.dimen.uiactionsheet_right_margin),
-                mContext.getResources().getDimensionPixelSize(R.dimen.uiactionsheet_bottom_margin));
-        alertRoot.setLayoutParams(lParams);
-    }
-    private void initSheet() {
-        layoutParent = xInflater.inflate(R.layout.layout_ui_action_sheet, null, false);
-        layoutParent.setOnClickListener(new View.OnClickListener() {
+        v.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View pView) {
                 if (mCancelable) {//点击对话框外消失
                     dismiss();
                 }
+            }
+        });
+        FrameLayout.LayoutParams lParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        lParams.gravity = Gravity.CENTER;
+        lParams.setMargins(
+                mContext.getResources().getDimensionPixelSize(R.dimen.uialertview_left_margin),
+                0,
+                mContext.getResources().getDimensionPixelSize(R.dimen.uialertview_right_margin),
+                0);
+        alertRoot.setLayoutParams(lParams);
+    }
+    public UIActionList setTitle(TitleAlertItem pTitle){
+        this.titleAlertItem = pTitle;
+        return this;
+    }
+    public UIActionList setMessage(AlertItem pMessage){
+        this.msgAlertItem = pMessage;
+        return this;
+    }
+    public UIActionList setCancel(AlertItem pCancel){
+        this.cancelAlertItem = pCancel;
+        return this;
+    }
+    public UIActionList setActions(List<AlertItem> pActions) {
+        this.actionItems = pActions;
+        return this;
+    }
+
+    public UIActionList setOnDismissListener(OnDismissListener pListener){
+        this.xDismissListener = pListener;
+        return this;
+    }
+    public UIActionList setOnItemClickListener(OnItemClickListener pOnItemClickListener){
+        this.xItemClickListener = pOnItemClickListener;
+        return this;
+    }
+    public UIActionList setOnShowListener(OnShowListener pOnShowListener){
+        this.xOnShowListener = pOnShowListener;
+        return this;
+    }
+    public UIActionList build(){
+        initAlert();
+        return this;
+    }
+    private void initAlert() {
+
+        layoutParent = xInflater.inflate(R.layout.layout_ui_alert_vertical, null, false);
+        layoutParent.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View pView) {
+                //占住焦点
             }
         });
         TextView titleTv = (TextView) layoutParent.findViewById(R.id.title);
@@ -133,12 +137,7 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         } else {
             titleTv.setVisibility(View.GONE);
         }
-        titleTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View pView) {
 
-            }
-        });
         TextView msgTv = (TextView) layoutParent.findViewById(R.id.message);
         if (msgAlertItem != null) {
             msgTv.setText(msgAlertItem.getContent());
@@ -148,14 +147,8 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         } else {
             msgTv.setVisibility(View.GONE);
         }
-        msgTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View pView) {
-
-            }
-        });
         TextView cancelTv = (TextView) layoutParent.findViewById(R.id.cancel);
-        if(cancelAlertItem == null)
+        if(cancelAlertItem==null)
             cancelAlertItem = new AlertItem("取消", Color.rgb(0, 99, 219), true);
         cancelTv.setText(cancelAlertItem.getContent());
         cancelTv.setTextColor(cancelAlertItem.getColor());
@@ -171,7 +164,8 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
             }
 
         });
-        ListView lv = (ListView)layoutParent.findViewById(R.id.actions);
+        View spline = layoutParent.findViewById(R.id.spline);
+        ListView lv = (ListView) layoutParent.findViewById(R.id.actions);
         if(actionItems!=null) {
             lv.setAdapter(new ActionAdapter(mContext, actionItems));
             lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -185,33 +179,34 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         }else {
             lv.setVisibility(View.GONE);
         }
-        if(actionItems!=null && actionItems.size()>5){
+        if(actionItems!=null && actionItems.size()>3){
             Resources r = mContext.getResources();
             int itemHeight = r.getDimensionPixelSize(R.dimen.ui_item_height);
             int lineHeight = r.getDimensionPixelSize(R.dimen.ui_line_height);
             LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    5*itemHeight+4*lineHeight);
+                    3*itemHeight+2*lineHeight);
             lv.setLayoutParams(lParams);
             layoutParent.requestLayout();
         }
 
-        Animation anim = AnimationUtils.loadAnimation(mContext,R.anim.push_bottom_in);
+        Animation anim = AnimationUtils.loadAnimation(mContext,R.anim.fade_in_center);
         layoutParent.startAnimation(anim);
         alertRoot.addView(layoutParent);
     }
 
-    public UIActionSheet show() {
+    public UIActionList show() {
         if (viewRoot != null && !isShowing()) {
             viewRoot.addView(parent);
-            if(xOnShowListener!=null)xOnShowListener.onShow();
+            if(xOnShowListener!=null)
+                xOnShowListener.onShow();
         }
         return this;
     }
 
     private void dismiss() {
         if (viewRoot!=null && viewRoot.findViewById(R.id.alert_root) != null) {
-            Animation anim = AnimationUtils.loadAnimation(mContext,R.anim.push_bottom_out);
+            Animation anim = AnimationUtils.loadAnimation(mContext,R.anim.fade_out_center);
             if(layoutParent!=null)layoutParent.startAnimation(anim);
             anim.setAnimationListener(new Animation.AnimationListener() {
                 @Override
@@ -221,7 +216,7 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
 
                 @Override
                 public void onAnimationEnd(Animation pAnimation) {
-                   if(parent!=null) ((ViewGroup)parent).removeView(layoutParent);
+                    if(parent!=null)((ViewGroup)parent).removeView(layoutParent);
                     if(viewRoot!=null)viewRoot.removeView(parent);
                     if (xDismissListener != null) {
                         xDismissListener.onAlertDismiss();
@@ -233,7 +228,6 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
 
                 }
             });
-
             //将焦点回交给activity
             if(xWindow!=null)xWindow.setCallback(mContext);
         }
@@ -246,16 +240,18 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
             return false;
     }
 
-    public UIActionSheet setCancelable(boolean flag) {
+    public UIActionList setCancelable(boolean flag) {
         mCancelable = flag;
         return this;
     }
-    public UIActionSheet setCanceledOnTouchOutside(boolean cancel) {
+
+    public UIActionList setCanceledOnTouchOutside(boolean cancel) {
         if (cancel && !mCancelable) {
             mCancelable = true;
         }
         return this;
     }
+
     public void onBackPressed() {
         if (mCancelable) {
             dismiss();

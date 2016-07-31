@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="wrap_content">
     <LinearLayout
@@ -15,7 +14,6 @@
         android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:gravity="center"
-        android:text="标题"
         android:textSize="14sp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -27,7 +25,6 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:textSize="14sp"
-            android:text="内容"
             android:padding="16dp"
             />
     <ListView
@@ -35,7 +32,7 @@
         android:dividerHeight="1dp"
         android:divider="#ddd"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:scrollbars="none"
         android:cacheColorHint="@android:color/transparent"
         ></ListView>
@@ -47,7 +44,6 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:gravity="center"
-        android:text="取消"
         android:textSize="18sp"
         android:layout_alignParentBottom="true"
         />

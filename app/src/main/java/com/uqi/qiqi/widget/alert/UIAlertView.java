@@ -18,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -33,6 +35,7 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
     private Activity mContext;
     private FrameLayout viewRoot;
     private View parent;
+    private View layoutParent;
     private Window xWindow;
     private LayoutInflater xInflater;
     private FrameLayout alertRoot;
@@ -44,10 +47,7 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
     private AlertItem cancelAlertItem;
     private AlertItem okAlertItem;
     private AlertItem msgAlertItem;
-    private ButtonOrientation orientation = ButtonOrientation.HORIZONTAL;
-    public enum ButtonOrientation{
-        VERTICAL,HORIZONTAL
-    }
+
     public UIAlertView(Context pContext) {
         if (!(pContext instanceof Activity)) {
             throw new RuntimeException("The context must is a Activity");
@@ -75,7 +75,11 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
         });
         FrameLayout.LayoutParams lParams = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         lParams.gravity = Gravity.CENTER;
-        lParams.setMargins(60, 0, 60, 0);
+        lParams.setMargins(
+                mContext.getResources().getDimensionPixelSize(R.dimen.uialertview_left_margin),
+                0,
+                mContext.getResources().getDimensionPixelSize(R.dimen.uialertview_right_margin),
+                0);
         alertRoot.setLayoutParams(lParams);
     }
     public UIAlertView setTitle( TitleAlertItem pTitle){
@@ -94,10 +98,7 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
         this.okAlertItem = pOk;
         return this;
     }
-    public UIAlertView setOrientation(ButtonOrientation orientation){
-        this.orientation = orientation;
-        return this;
-    }
+
     public UIAlertView setOnDismissListener(OnDismissListener pListener){
         this.xDismissListener = pListener;
         return this;
@@ -115,18 +116,14 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
         return this;
     }
     private void initAlert() {
-        View view;
-        if(orientation.equals(ButtonOrientation.HORIZONTAL))
-            view = xInflater.inflate(R.layout.layout_ui_alert, null, false);
-        else
-            view = xInflater.inflate(R.layout.layout_ui_alert_vertical, null, false);
-        view.setOnClickListener(new View.OnClickListener() {
+        layoutParent = xInflater.inflate(R.layout.layout_ui_alert, null, false);
+        layoutParent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View pView) {
                 //占住焦点
             }
         });
-        TextView titleTv = (TextView) view.findViewById(R.id.title);
+        TextView titleTv = (TextView) layoutParent.findViewById(R.id.title);
         if (titleAlertItem != null) {
             titleTv.setText(titleAlertItem.getContent());
             titleTv.setTextColor(titleAlertItem.getColor());
@@ -137,7 +134,7 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
             titleTv.setVisibility(View.GONE);
         }
 
-        TextView msgTv = (TextView) view.findViewById(R.id.message);
+        TextView msgTv = (TextView) layoutParent.findViewById(R.id.message);
         if (msgAlertItem != null) {
             msgTv.setText(msgAlertItem.getContent());
             msgTv.setTextColor(msgAlertItem.getColor());
@@ -146,7 +143,7 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
         } else {
             msgTv.setVisibility(View.GONE);
         }
-        TextView cancelTv = (TextView) view.findViewById(R.id.cancel);
+        TextView cancelTv = (TextView) layoutParent.findViewById(R.id.cancel);
         if(cancelAlertItem==null)
             cancelAlertItem = new AlertItem("取消", Color.rgb(0, 99, 219), true);
         cancelTv.setText(cancelAlertItem.getContent());
@@ -163,8 +160,8 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
             }
 
         });
-        View spline = view.findViewById(R.id.spline);
-        TextView okTv = (TextView) view.findViewById(R.id.ok);
+        View spline = layoutParent.findViewById(R.id.spline);
+        TextView okTv = (TextView) layoutParent.findViewById(R.id.ok);
         if (okAlertItem != null) {
             okTv.setText(okAlertItem.getContent());
             okTv.setTextColor(okAlertItem.getColor());
@@ -183,7 +180,9 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
                 }
             }
         });
-        alertRoot.addView(view);
+        Animation anim = AnimationUtils.loadAnimation(mContext,R.anim.fade_in_center);
+        layoutParent.startAnimation(anim);
+        alertRoot.addView(layoutParent);
     }
 
     public UIAlertView show() {
@@ -196,13 +195,31 @@ public class UIAlertView implements KeyEvent.Callback, Window.Callback {
     }
 
     private void dismiss() {
-        if (viewRoot.findViewById(R.id.alert_root) != null) {
-            viewRoot.removeView(parent);
-            if (xItemClickListener != null) {
-                xDismissListener.onAlertDismiss();
-            }
+        if (viewRoot!=null && viewRoot.findViewById(R.id.alert_root) != null) {
+            Animation anim = AnimationUtils.loadAnimation(mContext,R.anim.fade_out_center);
+            if(layoutParent!=null)layoutParent.startAnimation(anim);
+            anim.setAnimationListener(new Animation.AnimationListener() {
+                @Override
+                public void onAnimationStart(Animation pAnimation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animation pAnimation) {
+                    if(parent!=null)((ViewGroup)parent).removeView(layoutParent);
+                    if(viewRoot!=null)viewRoot.removeView(parent);
+                    if (xDismissListener != null) {
+                        xDismissListener.onAlertDismiss();
+                    }
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation pAnimation) {
+
+                }
+            });
             //将焦点回交给activity
-            xWindow.setCallback(mContext);
+            if(xWindow!=null)xWindow.setCallback(mContext);
         }
     }
 
