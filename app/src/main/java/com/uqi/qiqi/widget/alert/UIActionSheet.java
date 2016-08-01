@@ -40,22 +40,26 @@ import java.util.List;
 public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
 
     private Activity mContext;
-    private FrameLayout viewRoot;
-    private View parent;
     private Window xWindow;
     private LayoutInflater xInflater;
+
+    private FrameLayout viewRoot;
     private FrameLayout alertRoot;
+    private View parent;
+    private View layoutParent;
+
     private OnItemClickListener xItemClickListener;
     private OnDismissListener xDismissListener;
     private OnShowListener xOnShowListener;
-    private View.OnKeyListener mOnKeyListener;
+
     private boolean mCancelable = true;
-    private boolean mCancelableOnTouchSide = false;
+
     private TitleAlertItem titleAlertItem;
+    private AlertItem msgAlertItem;
     private AlertItem cancelAlertItem;
     private List<AlertItem> actionItems;
-    private AlertItem msgAlertItem;
-    private View layoutParent;
+
+
     public UIActionSheet(Context pContext) {
         if (!(pContext instanceof Activity)) {
             throw new RuntimeException("The context must is a Activity");
@@ -185,13 +189,14 @@ public class UIActionSheet implements KeyEvent.Callback, Window.Callback {
         }else {
             lv.setVisibility(View.GONE);
         }
-        if(actionItems!=null && actionItems.size()>5){
+        /**列表数据过多，会造成占满屏幕，这个地方控制一下，最多显示4个，其他则滚动*/
+        if(actionItems!=null && actionItems.size()>4){
             Resources r = mContext.getResources();
             int itemHeight = r.getDimensionPixelSize(R.dimen.ui_item_height);
             int lineHeight = r.getDimensionPixelSize(R.dimen.ui_line_height);
             LinearLayout.LayoutParams lParams = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT,
-                    5*itemHeight+4*lineHeight);
+                    4*itemHeight+3*lineHeight);
             lv.setLayoutParams(lParams);
             layoutParent.requestLayout();
         }

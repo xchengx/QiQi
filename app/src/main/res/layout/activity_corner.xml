@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context="com.uqi.qiqi.CornerActivity">
+    <com.uqi.qiqi.widget.CornerFlagView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:cfv_backgroundColor="#cf0"
+        app:cfv_orientation="right"
+        app:cfv_textContent="wrap_content"
+        app:cfv_textColor="#d12"
+        app:cfv_fullCorner="false"
+        app:cfv_textSize="16sp"
+        />
+
+    <com.uqi.qiqi.widget.CornerFlagView
+
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:cfv_backgroundColor="#abc"
+        app:cfv_orientation="left"
+        app:cfv_textContent="左角"
+        app:cfv_textColor="#000"
+        app:cfv_fullCorner="false"
+        app:cfv_textSize="16sp"
+        />
+    <com.uqi.qiqi.widget.CornerFlagView
+
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:cfv_backgroundColor="#1af"
+        app:cfv_orientation="right"
+        app:cfv_textContent="占满右角"
+        app:cfv_textColor="#dca"
+        app:cfv_fullCorner="true"
+        app:cfv_textSize="17sp"
+        />
+    <com.uqi.qiqi.widget.CornerFlagView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:cfv_backgroundColor="#34a"
+        app:cfv_orientation="left"
+        app:cfv_textContent="占满左角"
+        app:cfv_textColor="#cda"
+        app:cfv_fullCorner="true"
+        app:cfv_textSize="18sp"
+        />
+</LinearLayout>

@@ -1,5 +1,6 @@
 package com.uqi.qiqi;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -35,26 +36,32 @@ public class MainActivity extends AppCompatActivity {
         actions.add(new AlertItem("Action6"));
         actions.add(new AlertItem("Action7"));
         actions.add(new AlertItem("Action8"));
-
+        findViewById(R.id.showcorner).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View pView) {
+                Intent mIntent = new Intent(MainActivity.this,CornerActivity.class);
+                startActivity(mIntent);
+            }
+        });
         findViewById(R.id.showdialog).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View pView) {
                 new UIAlertView(MainActivity.this)
                         .setTitle(new TitleAlertItem("Ttile",R.mipmap.ic_launcher,TitleAlertItem.Align.left))
-                        .setMessage(new AlertItem("msg"))
-                        .setOk(new AlertItem("OK"))
+                        .setMessage(new AlertItem("这个地方是放提示的！"))
+                        .setOk(new AlertItem("OK",Color.RED))
                         .setCancelable(true)
                         .setCanceledOnTouchOutside(true)
                         .setOnShowListener(new OnShowListener() {
                             @Override
                             public void onShow() {
-                                Log.e("----------->","----->show");
+                                Toast.makeText(MainActivity.this,"UIAlertView 显示",Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(View pView, int position) {
-
+                                Toast.makeText(MainActivity.this,"UIAlertView 点击了>"+position,Toast.LENGTH_SHORT).show();
                             }
                         })
                         .build()
@@ -76,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
                                 Log.e("----------->","----->show");
                             }
                         })
+                        .setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onAlertDismiss() {
+                                Toast.makeText(MainActivity.this,"UIActionList Dismiss 了",Toast.LENGTH_SHORT).show();
+                            }
+                        })
                         .build()
                         .show();;
             }
@@ -86,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
                 new UIActionSheet(MainActivity.this)
                         .setTitle(new TitleAlertItem("",R.mipmap.ic_launcher,TitleAlertItem.Align.left))
+                        .setMessage(new AlertItem("这是一个提示语"))
                         .setActions(actions)
                         .setCancelable(true)
                         .setOnShowListener(new OnShowListener() {
@@ -97,7 +111,13 @@ public class MainActivity extends AppCompatActivity {
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(View pView, int position) {
-                                Log.e("----------->","position----->"+position);
+                                Toast.makeText(MainActivity.this,"UIActionSheet 点击了>"+position,Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onAlertDismiss() {
+                                Log.e("----------->","----->Dismiss");
                             }
                         })
                         .build()

@@ -12,50 +12,30 @@
     android:orientation="vertical"
     tools:context="com.uqi.qiqi.MainActivity"
     android:id="@+id/content">
-
-        <com.uqi.qiqi.widget.CornerFlagView
-            android:id="@+id/showdialog"
-            android:layout_width="wrap_content"
+        <Button
+            android:id="@+id/showcorner"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cfv_backgroundColor="#cf0"
-            app:cfv_orientation="right"
-            app:cfv_textContent="水平AlertView"
-            app:cfv_textColor="#d12"
-            app:cfv_fullCorner="false"
-            app:cfv_textSize="16sp"
+            android:text="显示角标"
+            />
+        <Button
+            android:id="@+id/showdialog"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="显示UIAlertView"
+            />
+        <Button
+            android:id="@+id/showvalert"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="显示UIActionList"
+            />
+        <Button
+            android:id="@+id/showActionSheet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="显示UIActionSheet"
             />
 
-        <com.uqi.qiqi.widget.CornerFlagView
-            android:id="@+id/showvalert"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cfv_backgroundColor="#abc"
-            app:cfv_orientation="left"
-            app:cfv_textContent="垂直AlertView"
-            app:cfv_textColor="#000"
-            app:cfv_fullCorner="false"
-            app:cfv_textSize="16sp"
-            />
-        <com.uqi.qiqi.widget.CornerFlagView
-            android:id="@+id/showActionSheet"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cfv_backgroundColor="#1af"
-            app:cfv_orientation="right"
-            app:cfv_textContent="ActionSheet"
-            app:cfv_textColor="#dca"
-            app:cfv_fullCorner="true"
-            app:cfv_textSize="17sp"
-            />
-        <com.uqi.qiqi.widget.CornerFlagView
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            app:cfv_backgroundColor="#34a"
-            app:cfv_orientation="left"
-            app:cfv_textContent="已领取"
-            app:cfv_textColor="#cda"
-            app:cfv_fullCorner="true"
-            app:cfv_textSize="18sp"
-            />
 
 </LinearLayout>
