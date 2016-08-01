@@ -15,6 +15,7 @@
 
 ```xml
   <com.uqi.qiqi.widget.CornerFlagView
+      xmlns:app="http://schemas.android.com/apk/res-auto"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       app:cfv_backgroundColor="#cf0"
