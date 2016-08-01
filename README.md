@@ -1,3 +1,4 @@
+##CornerFlagView
 这是一个自定义的角标的View，有如下特性<br>
         1.占满左右上角，或是只占一部分，使用 **`cfv_fullCorner`**<br>
         2.设置文字颜色，使用 **`cfv_textColor`**<br>
@@ -8,7 +9,7 @@
         7.支持**`wrap_content`**<br>
         8.CornerFlagView采用正方形模式处理，在绘制时会用width填充height，使其一致<br>
 
-![范例](https://github.com/xchengx/QiQi/blob/master/screenshots/device-2016-07-30-204747.png)
+![范例](https://github.com/xchengx/QiQi/blob/master/screenshots/device-2016-08-01-105302.png)
 
 ##使用方法
 
@@ -23,4 +24,83 @@
       app:cfv_fullCorner="false"
       app:cfv_textSize="16sp"
       />
+```
+
+##IOS风格对话框
+![范例](https://github.com/xchengx/QiQi/blob/master/screenshots/demo.gif)
+
+###UIAlerView
+   ```Java
+   new UIAlertView(MainActivity.this)
+           .setTitle(new TitleAlertItem("Ttile",R.mipmap.ic_launcher,TitleAlertItem.Align.left))
+           .setMessage(new AlertItem("这个地方是放提示的！"))
+           .setOk(new AlertItem("OK",Color.RED))
+           .setCancelable(true)
+           .setCanceledOnTouchOutside(true)
+           .setOnShowListener(new OnShowListener() {
+               @Override
+               public void onShow() {
+                   Toast.makeText(MainActivity.this,"UIAlertView 显示",Toast.LENGTH_SHORT).show();
+               }
+           })
+           .setOnItemClickListener(new OnItemClickListener() {
+               @Override
+               public void onItemClick(View pView, int position) {
+                   Toast.makeText(MainActivity.this,"UIAlertView 点击了>"+position,Toast.LENGTH_SHORT).show();
+               }
+           })
+           .build()
+           .show();
+```
+###UIActionList
+```Java
+    new UIActionList(MainActivity.this)
+            .setTitle(new TitleAlertItem("Ttile",R.mipmap.ic_launcher, TitleAlertItem.Align.left))
+            .setMessage(new AlertItem("msg"))
+            .setActions(actions)
+            .setCancelable(true)
+            .setCanceledOnTouchOutside(true)
+            .setOnShowListener(new OnShowListener() {
+                @Override
+                public void onShow() {
+                    Log.e("----------->","----->show");
+                }
+            })
+            .setOnDismissListener(new OnDismissListener() {
+                @Override
+                public void onAlertDismiss() {
+                    Toast.makeText(MainActivity.this,"UIActionList Dismiss 了",Toast.LENGTH_SHORT).show();
+                }
+            })
+            .build()
+            .show();
+```
+
+###UIActionSheet
+```Java
+     new UIActionSheet(MainActivity.this)
+                .setTitle(new TitleAlertItem("",R.mipmap.ic_launcher,TitleAlertItem.Align.left))
+                .setMessage(new AlertItem("这是一个提示语"))
+                .setActions(actions)
+                .setCancelable(true)
+                .setOnShowListener(new OnShowListener() {
+                    @Override
+                    public void onShow() {
+                        Log.e("----------->","----->show");
+                    }
+                })
+                .setOnItemClickListener(new OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View pView, int position) {
+                        Toast.makeText(MainActivity.this,"UIActionSheet 点击了>"+position,Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setOnDismissListener(new OnDismissListener() {
+                    @Override
+                    public void onAlertDismiss() {
+                        Log.e("----------->","----->Dismiss");
+                    }
+                })
+                .build()
+                .show();
 ```
